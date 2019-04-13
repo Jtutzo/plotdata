@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+python3.6 -m pip install cx_Freeze
+python3.6 -m pip install idna
+python3.6 setup.py build_exe

@@ -1,17 +1,17 @@
-#!/usr/bin/env python3.6
+#!/usr/bin/env python3.8
 # coding: utf-8
 
-import argparse
 import os
 import re
 import sys
 import traceback
 
+import matplotlib.pyplot as plt
+
 from util import io
 from util.io import Color
-from matplotlib import pyplot as plt
 
-input_file = './demo.txt'
+input_files = ['./demo.txt', 'demo.txt']
 output_file = './demo.png'
 
 
@@ -21,11 +21,8 @@ class ReadFileError(RuntimeError):
 
 
 def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-p", "--path", help="File path to plot")
-    args = parser.parse_args()
     try:
-        line_filtered = read_file(args.path)
+        line_filtered = read_files(input_files)
 
         create_graph([float(i[1]) for i in line_filtered],
                      [float(i[2]) for i in line_filtered],
@@ -41,9 +38,16 @@ def main():
         return 1
 
 
-def read_file(file=None):
+def read_files(files):
+    line_filtered = []
+    for file in files:
+        line_filtered += read_file(file)
+    return line_filtered
+
+
+def read_file(file):
     if file is None:
-        file = input_file
+        file = input_files[0]
     if not os.path.exists(file):
         raise ReadFileError
     with open(file) as f:
